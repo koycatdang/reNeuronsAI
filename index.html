@@ -3,10 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>NEURONS - AI Tools Hub</title>
     <link rel="stylesheet" href="style.css?v=20241230001">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Force CSS Reload Script -->
+    <script>
+        // Force reload CSS to prevent cache issues
+        function forceReloadCSS() {
+            const links = document.querySelectorAll('link[rel="stylesheet"]');
+            links.forEach(link => {
+                if (link.href.includes('style.css')) {
+                    const newHref = link.href.split('?')[0] + '?t=' + new Date().getTime();
+                    link.href = newHref;
+                }
+            });
+        }
+        
+        // Call immediately when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            forceReloadCSS();
+            console.log('CSS force reloaded to prevent cache');
+        });
+        
+        // Also add keyboard shortcut for manual refresh
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Shift+L to force reload CSS
+            if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+                e.preventDefault();
+                forceReloadCSS();
+                console.log('CSS manually reloaded');
+                alert('CSS reloaded! Press F5 to refresh page.');
+            }
+        });
+    </script>
 </head>
 <body>
     <div class="app-container">
