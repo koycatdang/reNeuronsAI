@@ -1613,7 +1613,7 @@ body {
 }
 
 .results-header {
-    padding: 20px 32px;
+    padding: 0px 0px;
     display: flex !important;
     justify-content: space-between;
     align-items: center;
