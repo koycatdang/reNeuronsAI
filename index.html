@@ -13,6 +13,11 @@
         <div class="main-layout">
             <!-- Sidebar Navigation -->
             <aside class="sidebar">
+                <!-- Collapse Toggle Button -->
+                <button class="sidebar-collapse-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
                 <nav class="sidebar-nav">
                     <div class="nav-section">
                         <div class="nav-section">
@@ -32,14 +37,14 @@
                     </div>
                         <div class="section-label">WORKSPACE</div>
                         <div class="nav-items">
-                            <a href="index.html" class="nav-item">
+                            <a href="index.html" class="nav-item" data-tooltip="Home">
                                 <div class="nav-icon">
                                     <i class="fas fa-home"></i>
                                 </div>
                                 <span>Home</span>
                             </a>
                             
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-tooltip="Projects">
                                 <div class="nav-icon">
                                     <i class="fas fa-project-diagram"></i>
                                 </div>
@@ -54,21 +59,21 @@
                     <div class="nav-section">
                         <div class="section-label">AI TOOLS</div>
                         <div class="nav-items">
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-tooltip="Content Extraction">
                                 <div class="nav-icon extraction">
                                     <i class="fas fa-file-alt"></i>
                                 </div>
                                 <span>Content Extraction</span>
                             </a>
                             
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-tooltip="Smart Rewriting">
                                 <div class="nav-icon rewriting">
                                     <i class="fas fa-pen-fancy"></i>
                                 </div>
                                 <span>Smart Rewriting</span>
                             </a>
                             
-                            <a href="#" class="nav-item active">
+                            <a href="#" class="nav-item active" data-tooltip="Translation Hub">
                                 <div class="nav-icon translation">
                                     <i class="fas fa-language"></i>
                                 </div>
@@ -77,21 +82,21 @@
                                 <div class="active-indicator"></div>
                             </a>
                             
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-tooltip="Voiceover Synthesis">
                                 <div class="nav-icon voiceover">
                                     <i class="fas fa-microphone-alt"></i>
                                 </div>
                                 <span>Voiceover Synthesis</span>
                             </a>
                             
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-tooltip="Images Product Generation">
                                 <div class="nav-icon product">
                                     <i class="fas fa-cube"></i>
                                 </div>
                                 <span>Images Product Generation</span>
                             </a>
                             
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-tooltip="Video Generation">
                                 <div class="nav-icon video">
                                     <i class="fas fa-video"></i>
                                 </div>
@@ -99,14 +104,14 @@
                                 <span class="nav-badge new">NEW</span>
                             </a>
                             
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-tooltip="Smart Editing">
                                 <div class="nav-icon editing">
                                     <i class="fas fa-cut"></i>
                                 </div>
                                 <span>Smart Editing</span>
                             </a>
                             
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-tooltip="One-Click Publishing">
                                 <div class="nav-icon publishing">
                                     <i class="fas fa-rocket"></i>
                                 </div>
@@ -608,31 +613,6 @@
 
                         </div>
                     </div>
-
-                    <!-- Other tab contents would go here -->
-                    <div class="tab-content" id="original">
-                        <div class="coming-soon">
-                            <i class="fas fa-file-alt"></i>
-                            <h3>Original Content View</h3>
-                            <p>This feature is coming soon</p>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="vietnamese">
-                        <div class="coming-soon">
-                            <i class="fas fa-flag"></i>
-                            <h3>Vietnamese Analysis</h3>
-                            <p>This feature is coming soon</p>
-                </div>
-                    </div>
-
-                    <div class="tab-content" id="analysis">
-                        <div class="coming-soon">
-                            <i class="fas fa-chart-bar"></i>
-                            <h3>Translation Analysis</h3>
-                            <p>This feature is coming soon</p>
-                        </div>
-                    </div>
                 </div>
             </main>
         </div>
@@ -648,7 +628,10 @@
                 
                 // Add active class to clicked tab
                 this.classList.add('active');
-                document.getElementById(this.dataset.tab).classList.add('active');
+                
+                // Show corresponding content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
             });
         });
 
@@ -670,10 +653,6 @@
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                
-                const view = this.dataset.view;
-                const results = document.querySelector('.translation-results');
-                results.className = view === 'list' ? 'translation-results list-view' : 'translation-results';
             });
         });
 
@@ -820,6 +799,38 @@
                         }, 2000);
                     }, 3000);
                 });
+            }
+        });
+
+        // Sidebar Collapse Toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('collapsed');
+            
+            // Debug: Check icons visibility
+            const icons = sidebar.querySelectorAll('.nav-icon');
+            console.log('Sidebar collapsed:', sidebar.classList.contains('collapsed'));
+            console.log('Number of icons found:', icons.length);
+            
+            icons.forEach((icon, index) => {
+                const styles = window.getComputedStyle(icon);
+                console.log(`Icon ${index}:`, {
+                    display: styles.display,
+                    opacity: styles.opacity,
+                    visibility: styles.visibility
+                });
+            });
+            
+            // Save state to localStorage
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            localStorage.setItem('sidebarCollapsed', isCollapsed);
+        }
+
+        // Restore sidebar state on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isCollapsed) {
+                document.querySelector('.sidebar').classList.add('collapsed');
             }
         });
     </script>
